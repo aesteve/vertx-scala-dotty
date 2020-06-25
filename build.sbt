@@ -1,4 +1,10 @@
+import Docker.autoImport.exposedPorts
+import sbt.Package.ManifestAttributes
+
 val dottyVersion = "0.24.0-RC1"
+
+enablePlugins(DockerPlugin)
+exposedPorts := Seq(8666)
 
 lazy val root = project
   .in(file("."))
@@ -17,5 +23,8 @@ lazy val root = project
     ).map(_.withDottyCompat(scalaVersion.value)),
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.2.0" % "test"
-    )
+    ),
+    packageOptions += ManifestAttributes(
+      ("Main-Verticle", "scala:com.github.aesteve.HttpVerticle"))
+
   )
